@@ -10,6 +10,7 @@
 };
 
 / {
+
     macros {
         // macos print screen (cmd+shift+4)
         mpsz: mpsz {
@@ -20,9 +21,7 @@
             >; // Left Shift + Command + 4
         };
     };
-};
 
-/ {
     keymap {
         compatible = "zmk,keymap";
 
