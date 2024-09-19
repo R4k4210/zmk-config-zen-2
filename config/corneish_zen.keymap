@@ -15,7 +15,9 @@
         mpsz: mpsz {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp LSHFT(LCMD(4))>; // Left Shift + Command + 4
+            bindings = < 
+                &kp LS(LGUI(4))
+            >; // Left Shift + Command + 4
         };
     };
 };
