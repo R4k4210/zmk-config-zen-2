@@ -12,14 +12,14 @@
 / {
 
     macros {
-        // macos print screen (cmd+shift+4)
         mpsz: mpsz {
+            label = "macos print screen zone";
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             bindings 
-                = <macro_press &kp LSHIFT &kp LCMD &kp N4>
-                , <macro_release &kp LSHIFT &kp LCMD &kp N4>
-            ;
+                = <&macro_press &kp LSHIFT &kp LCMD &kp N4>
+                , <&macro_release &kp LSHIFT &kp LCMD &kp N4>
+                ;
         };
     };
 
