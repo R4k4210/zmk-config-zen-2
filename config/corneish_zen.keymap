@@ -2,11 +2,30 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 
+// DEFAULT (WINDOWS)
+#define DEFAULT 0
+#define MACOS 1
+#define LOWER 2
+#define RAISE 3
+#define CONFIG 4
+
 / {
     chosen {
         zmk,matrix_transform = &default_transform;
-
         //zmk,matrix_transform = &five_column_transform;
+    };
+};
+
+/ {
+    macros {
+        // macos print screen (cmd+shift+4)
+        mpcz: mpcz {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <20>;
+            tap-ms = <10>;
+            bindings = <&kp LCMD &kp LSHIFT &kp N4>;
+        };
     };
 };
 
@@ -15,7 +34,7 @@
         compatible = "zmk,keymap";
 
         default_layer {
-            label = "QWERTY";
+            label = "WINDOWS";
 
             // -----------------------------------------------------------------------------------------
             // | ESC  |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U   |  I  |  O  |  P  | BKSP |
@@ -27,7 +46,24 @@
 &kp ESC    &kp Q  &kp W  &kp E     &kp R  &kp T        &kp Y    &kp U  &kp I      &kp O    &kp P     &kp BSPC
 &kp LSHFT  &kp A  &kp S  &kp D     &kp F  &kp G        &kp H    &kp J  &kp K      &kp L    &kp SEMI  &kp SQT
 &kp LCTRL  &kp Z  &kp X  &kp C     &kp V  &kp B        &kp N    &kp M  &kp COMMA  &kp DOT  &kp FSLH  &kp LEFT_GUI
-                         &kp LALT  &mo 1  &kp SPACE    &kp RET  &mo 2  &kp RALT
+                         &kp LALT  &mo 2  &kp SPACE    &kp RET  &mo 3  &kp RALT
+            >;
+        };
+
+         macos_layer {
+            label = "MACOS";
+
+            // -----------------------------------------------------------------------------------------
+            // | ESC  |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U   |  I  |  O  |  P  | BKSP |
+            // | SHFT |  A  |  S  |  D  |  F  |  G  |   |  H  |  J   |  K  |  L  |  ;  |  '   |
+            // | CTRL |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M   |  ,  |  .  |  /  | CMD  |
+            //                    | CMD | LWR | SPC |   | ENT | RSE  | ALT |
+
+            bindings = <
+&kp ESC    &kp Q  &kp W  &kp E     &kp R  &kp T        &kp Y    &kp U  &kp I      &kp O    &kp P     &kp BSPC
+&kp LSHFT  &kp A  &kp S  &kp D     &kp F  &kp G        &kp H    &kp J  &kp K      &kp L    &kp SEMI  &kp SQT
+&kp LCTRL  &kp Z  &kp X  &kp C     &kp V  &kp B        &kp N    &kp M  &kp COMMA  &kp DOT  &kp FSLH  &kp RCMD 
+                         &kp LCMD  &mo 2  &kp SPACE    &kp RET  &mo 3  &kp RALT
             >;
         };
 
@@ -48,14 +84,14 @@
             >;
         };
 
-        raise_layer {
+        rise_layer {
             label = "SYMBOL";
 
             // -----------------------------------------------------------------------------------------
             // |  TAB |  !  |  @  |  #  |  $  |  %  |   |  ^  |  &  |  *  |  (  |  )  |  DEL |
-            // | SHFT | BT1 | BT2 | BT3 | BT4 | BT5 |   |  -  |  =  |  [  |  ]  |  \  |  `   |
-            // | CTRL |     |     |BTRCL|     |     |   |  _  |  +  |  {  |  }  | "|" |  ~   |
-            //                    | GUI |     | SPC |   | ENT |     | ALT |
+            // | SHFT |     |     |     |     |     |   |  -  |  =  |  [  |  ]  |  \  |  `   |
+            // | CTRL |     |     |     |     |     |   |  _  |  +  |  {  |  }  | "|" |  ~   |
+            //                    |LALT |     | SPC |   | ENT |     |RALT |
 
             bindings = <
 &kp TAB    &kp EXCL  &kp AT  &kp HASH  &kp DLLR  &kp PRCNT    &kp CARET  &kp AMPS   &kp KP_MULTIPLY  &kp LPAR  &kp RPAR  &kp DEL
@@ -65,9 +101,9 @@
             >;
         };
 
-        tri_layer {
+        config_layer {
             bindings = <
-&trans          &trans        &trans        &trans        &trans        &trans          &trans  &trans  &trans  &trans  &trans  &trans
+&trans          &tog 1        &trans        &trans        &trans        &trans          &trans  &trans  &trans  &trans  &trans  &trans
 &bt BT_CLR      &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4    &trans  &trans  &trans  &trans  &trans  &trans
 &bt BT_CLR_ALL  &trans        &trans        &trans        &trans        &trans          &trans  &trans  &trans  &trans  &trans  &trans
                                             &trans        &trans        &trans          &trans  &trans  &trans
@@ -80,9 +116,9 @@
     conditional_layers {
         compatible = "zmk,conditional-layers";
 
-        tri_layer {
-            if-layers = <1 2>;
-            then-layer = <3>;
+        config_layer {
+            if-layers = <LOWER RISE>;
+            then-layer = <CONFIG>;
         };
     };
 };
